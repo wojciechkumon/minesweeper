@@ -1,0 +1,6 @@
+package minesweeper.model;
+
+public enum Position {
+	LEFT_UPPER_CORNER, TOP, RIGHT_UPPER_CORNER, RIGHT_SIDE, RIGHT_LOWER_CORNER, BOTTOM, LEFT_LOWER_CORNER, LEFT_SIDE, CENTER
+}
+
