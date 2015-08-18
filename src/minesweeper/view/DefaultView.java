@@ -2,6 +2,7 @@ package minesweeper.view;
 
 import java.awt.Font;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Observable;
 
 import javax.swing.JButton;
@@ -9,6 +10,11 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 
 import minesweeper.controller.Controller;
+import minesweeper.model.ClickState;
+import minesweeper.model.Field;
+import minesweeper.model.Model;
+import minesweeper.model.Range;
+import minesweeper.model.UpdateBox;
 
 public class DefaultView extends JFrame implements View {
 	private static final long serialVersionUID = -1786179871578950490L;
@@ -20,7 +26,7 @@ public class DefaultView extends JFrame implements View {
 	private JLabel lblMinesLeft, lblWinOrLose;
 	private JButton btnRestart, btnSettings;
 	
-	int minesLeft;
+	private int minesLeft;
 	
 	public DefaultView() throws IOException {
 		super("MineSweeper by wojtas626");
@@ -38,11 +44,112 @@ public class DefaultView extends JFrame implements View {
 
 	@Override
 	public void update(Observable o, Object arg) {
-		// TODO Auto-generated method stub
-		
+		if (arg != null) {
+			Model model = (Model)o;
+			UpdateBox updateBox = (UpdateBox)arg;
+			if (updateBox.isNeededRestart()) {
+				updateRestart(model);
+			} else {
+				if (updateBox.isMinesLeftToUpdate())
+					updateMinesLeft(model);
+				if (updateBox.getFieldsToUpdate() != null)
+					updateFields(model, updateBox.getFieldsToUpdate());
+				if (updateBox.isLose())
+					lose();
+				else if (updateBox.isWin())
+					win();
+			}
+		}
 	}
 
 	
+	private void win() {
+		// TODO Auto-generated method stub
+		System.out.println("win");
+	}
+
+	private void lose() {
+		// TODO Auto-generated method stub
+		System.out.println("lose");
+	}
+
+	private void updateFields(Model model, ArrayList<Field> fieldsToUpdate) {
+		for (Field field: fieldsToUpdate) {
+			updateField(model, field);
+		}
+	}
+	
+	private void updateField(Model model, Field fieldToUpdate) {
+		if (fieldToUpdate.getClickState() == ClickState.CLICKED) {
+			updateClickedField(fieldToUpdate);
+		} else if (fieldToUpdate.getClickState() == ClickState.FLAG) {
+			updateFlaggedField(fieldToUpdate);
+		} else if (fieldToUpdate.getClickState() == ClickState.NOT_CLICKED) {
+			updateNotClickedField(fieldToUpdate);
+		}
+	}
+
+	private void updateClickedField(Field fieldToUpdate) {
+		MineButton mineBtn = get(fieldToUpdate.getX(), fieldToUpdate.getY());
+		Backgrounds bg = Backgrounds.getInstace();
+		
+		mineBtn.setImage(bg.getMinesCounterImage(fieldToUpdate.getMineState().getSurroundingMines()));
+		mineBtn.repaint();
+	}
+	
+	private void updateFlaggedField(Field fieldToUpdate) {
+		MineButton mineBtn = get(fieldToUpdate.getX(), fieldToUpdate.getY());
+		Backgrounds bg = Backgrounds.getInstace();
+
+		if ((mineBtn.getMousePosition() != null)
+				&& Range.isPointInBounds(mineBtn.getMousePosition(), 0, 0,
+						MineButton.WIDTH, MineButton.HEIGHT))
+			mineBtn.setImage(bg.hoveredFlag);
+		else
+			mineBtn.setImage(bg.flag);
+		mineBtn.repaint();
+	}
+	
+	private void updateNotClickedField(Field fieldToUpdate) {
+		MineButton mineBtn = get(fieldToUpdate.getX(), fieldToUpdate.getY());
+		Backgrounds bg = Backgrounds.getInstace();
+		
+		if ((mineBtn.getMousePosition() != null)
+				&& Range.isPointInBounds(mineBtn.getMousePosition(), 0, 0,
+						MineButton.WIDTH, MineButton.HEIGHT))
+			mineBtn.setImage(bg.hoveredField);
+		else
+			mineBtn.setImage(bg.field);
+		mineBtn.repaint();
+	}
+
+	private void updateMinesLeft(Model model) {
+		minesLeft = model.getMinesLeft();
+		lblMinesLeft.setText(Integer.toString(minesLeft));
+	}
+
+	private void updateRestart(Model model) {
+		// TODO Auto-generated method stub
+	}
+
+	
+	
+	public void makeFields(int width, int height) {
+		for (int i = 0; i < height; i++) {
+			for (int j = 0; j < width; j++) {
+				mineBtns[i][j] = new MineButton(i, j, this);
+				mineBtns[i][j].setLocation(80 + j * MineButton.WIDTH, 80 + i * MineButton.HEIGHT);
+
+				add(mineBtns[i][j]);
+			}
+		}
+		if (width > 12) {
+			setSize(160 + MineButton.WIDTH * width, 140 + MineButton.HEIGHT * height);
+		} else {
+			setSize(160 + MineButton.WIDTH * 13, 140 + MineButton.HEIGHT * height);
+		}
+
+	}
 	
 	private void init() {
 		setLayout(null);
@@ -71,23 +178,6 @@ public class DefaultView extends JFrame implements View {
 		add(btnSettings);
 	}
 	
-	public void makeFields(int width, int height) {
-		for (int i = 0; i < height; i++) {
-			for (int j = 0; j < width; j++) {
-				mineBtns[i][j] = new MineButton(i, j, this);
-				mineBtns[i][j].setLocation(80 + j * MineButton.WIDTH, 80 + i * MineButton.HEIGHT);
-
-				add(mineBtns[i][j]);
-			}
-		}
-		if (width > 12) {
-			setSize(160 + MineButton.WIDTH * width, 140 + MineButton.HEIGHT * height);
-		} else {
-			setSize(160 + MineButton.WIDTH * 13, 140 + MineButton.HEIGHT * height);
-		}
-
-	}
-	
 	
 	
 	public int getMinesWidth() {
@@ -108,6 +198,18 @@ public class DefaultView extends JFrame implements View {
 
 	public Controller getController() {
 		return controller;
+	}
+
+	public int getMinesLeft() {
+		return minesLeft;
+	}
+
+	public void setMinesLeft(int minesLeft) {
+		this.minesLeft = minesLeft;
+	}
+	
+	public MineButton get(int x, int y) {
+		return mineBtns[x][y];
 	}
 
 }

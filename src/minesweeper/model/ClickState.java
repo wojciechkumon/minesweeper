@@ -1,5 +1,5 @@
 package minesweeper.model;
 
 public enum ClickState {
-	NOT_CLICKED, FLAG, QUESTION_MARK
+	NOT_CLICKED, CLICKED, FLAG, QUESTION_MARK
 }

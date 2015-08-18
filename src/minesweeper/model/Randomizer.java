@@ -50,10 +50,10 @@ public class Randomizer {
 			
 		try {
 			long time1 = System.nanoTime();
-			t = rnd.getRandomMineNumbers(9, 10);
+			t = rnd.getRandomMineNumbers(99, 480);
 			long time2 = System.nanoTime();
 			Arrays.sort(t);
-			System.out.println(Arrays.toString(t));
+//			System.out.println(Arrays.toString(t));
 			System.out.println(time2-time1);
 		} catch (AmountOutOfRange e) {
 			e.printStackTrace();

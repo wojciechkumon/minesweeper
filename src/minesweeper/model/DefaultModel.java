@@ -8,16 +8,13 @@ public class DefaultModel extends Model {
 	private FieldsBoard fieldsBoard;
 	
 	public DefaultModel() throws AmountOutOfRange, PointOutOfBoardBounds {
-		setFieldsBoard(new FieldsBoard());
+		fieldsBoard = new FieldsBoard(this);
 	}
 
 	public FieldsBoard getFieldsBoard() {
 		return fieldsBoard;
 	}
 
-	public void setFieldsBoard(FieldsBoard fieldsBoard) {
-		this.fieldsBoard = fieldsBoard;
-	}
 
 	@Override
 	public void changeToFlag(MineButton mineBtn) {
@@ -33,5 +30,43 @@ public class DefaultModel extends Model {
 	public void checkField(MineButton mineBtn) {
 		fieldsBoard.checkField(mineBtn);
 	}
+
+	@Override
+	public boolean isAreaRevealPossible(MineButton mineBtn) {
+		return fieldsBoard.isAreaRevealPossible(mineBtn);
+	}
+
+	@Override
+	public void doAreaReveal(MineButton mineBtn) {
+		fieldsBoard.doAreaReveal(mineBtn);
+	}
+	
+	@Override
+	public void setChanges() {
+		setChanged();
+	}
+
+	@Override
+	public int getMinesLeft() {
+		return fieldsBoard.getMinesLeft();
+	}
+
+	@Override
+	public int getHorizontalNumberOfMines() {
+		return fieldsBoard.getHorizontalMines();
+	}
+
+	@Override
+	public int getVerticalNumberOfMines() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int getNumberOfMines() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+	
 	
 }

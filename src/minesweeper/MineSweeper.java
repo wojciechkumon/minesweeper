@@ -19,7 +19,7 @@ public class MineSweeper {
 			controller = new Controller(model, view);
 			view.setController(controller);
 			view.setVisible(true);
-			view.makeFields(30, 16);
+			view.makeFields(20, 10);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

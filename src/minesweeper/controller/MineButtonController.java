@@ -31,6 +31,7 @@ public class MineButtonController implements MouseListener {
 		} else if (mineBtn.getImage() == Backgrounds.getInstace().flag) {
 			mineBtn.setImage(Backgrounds.getInstace().hoveredFlag);
 		}
+		mineBtn.repaint();
 	}
 
 	@Override
@@ -42,7 +43,7 @@ public class MineButtonController implements MouseListener {
 		} else if (mineBtn.getImage() == Backgrounds.getInstace().hoveredFlag) {
 			mineBtn.setImage(Backgrounds.getInstace().flag);
 		}
-
+		mineBtn.repaint();
 	}
 
 	@Override
@@ -76,7 +77,6 @@ public class MineButtonController implements MouseListener {
 		
 		if (btnImg == bg.clickedField) {
 			if (isPointInBounds(e.getPoint(), 0, 0, MineButton.WIDTH, MineButton.HEIGHT)) {
-				mineBtn.setImage(bg.minesCounter0);
 				owner.getModel().checkField(mineBtn);
 			} else {
 				mineBtn.setImage(bg.field);
@@ -88,10 +88,6 @@ public class MineButtonController implements MouseListener {
 				mineBtn.setImage(bg.flag);
 			}
 		}
-			
-		// TODO
-		
-		
 	}
 
 	private void mouseReleasedRightBtn(MouseEvent e) {
@@ -100,21 +96,20 @@ public class MineButtonController implements MouseListener {
 		Backgrounds bg = Backgrounds.getInstace();
 		
 		if ((btnImg == bg.field) || (btnImg == bg.hoveredField) || (btnImg == bg.clickedField)) {
-			mineBtn.setImage(bg.flag);
 			owner.getModel().changeToFlag(mineBtn);
 		} else if ((btnImg == bg.flag) || (btnImg == bg.hoveredFlag) || (btnImg == bg.clickedFlag)) {
-			mineBtn.setImage(bg.field);
 			owner.getModel().removeFlag(mineBtn);
 		}
-		mineBtn.repaint();
 	}
 
 	private void mouseReleasedMiddleBtn(MouseEvent e) {
 		MineButton mineBtn = (MineButton) e.getSource();
 		BufferedImage btnImg = mineBtn.getImage();
 		Backgrounds bg = Backgrounds.getInstace();
-		
 		//TODO
+		if (owner.getModel().isAreaRevealPossible(mineBtn)) {
+			owner.getModel().doAreaReveal(mineBtn);
+		}
 	}
 
 

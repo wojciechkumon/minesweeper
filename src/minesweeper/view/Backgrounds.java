@@ -103,5 +103,32 @@ public class Backgrounds {
 		return instance;
 	}
 	
+	public BufferedImage getMinesCounterImage(int surroundingMines) {
+		switch (surroundingMines) {
+		case 0:
+			return minesCounter0;
+		case 1:
+			return minesCounter1;
+		case 2:
+			return minesCounter2;
+		case 3:
+			return minesCounter3;
+		case 4:
+			return minesCounter4;
+		case 5:
+			return minesCounter5;
+		case 6:
+			return minesCounter6;
+		case 7:
+			return minesCounter7;
+		case 8:
+			return minesCounter8;
+		case 9:
+			return mine;
+		default:
+			return null;
+		}
+	}
+	
 	
 }
