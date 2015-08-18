@@ -2,6 +2,7 @@ package minesweeper.model;
 
 import minesweeper.exceptions.AmountOutOfRange;
 import minesweeper.exceptions.PointOutOfBoardBounds;
+import minesweeper.view.MineButton;
 
 public class DefaultModel extends Model {
 	private FieldsBoard fieldsBoard;
@@ -16,6 +17,21 @@ public class DefaultModel extends Model {
 
 	public void setFieldsBoard(FieldsBoard fieldsBoard) {
 		this.fieldsBoard = fieldsBoard;
+	}
+
+	@Override
+	public void changeToFlag(MineButton mineBtn) {
+		fieldsBoard.changeToFlag(mineBtn);
+	}
+
+	@Override
+	public void removeFlag(MineButton mineBtn) {
+		fieldsBoard.removeFlag(mineBtn);
+	}
+
+	@Override
+	public void checkField(MineButton mineBtn) {
+		fieldsBoard.checkField(mineBtn);
 	}
 	
 }

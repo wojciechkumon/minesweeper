@@ -1,12 +1,12 @@
 package minesweeper.model;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.function.Consumer;
 
 import minesweeper.exceptions.AmountOutOfRange;
 import minesweeper.exceptions.PointOutOfBoardBounds;
+import minesweeper.view.MineButton;
 
 public class FieldsBoard {
 	private int width;
@@ -122,9 +122,26 @@ public class FieldsBoard {
 	
 	
 	
+
 	
+	
+	
+	public void changeToFlag(MineButton mineBtn) {
+		--minesLeft;
+		//TODO model flag
+	}
 
-
+	public void removeFlag(MineButton mineBtn) {
+		++minesLeft;
+		//TODO model remove flag
+	}
+	
+	public void checkField(MineButton mineBtn) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	
 	
 	
 	
@@ -165,7 +182,7 @@ public class FieldsBoard {
 		FieldsBoard ms = null;
 		try {
 			long time1 = System.currentTimeMillis();
-			ms = new FieldsBoard(10, 10, 10);
+			ms = new FieldsBoard(30, 16, 99);
 			long time2 = System.currentTimeMillis();
 			ms.setMines(ms.getMinesToSet());
 			long time3 = System.currentTimeMillis();
@@ -177,12 +194,13 @@ public class FieldsBoard {
 		
 		for (int i = 0; i < ms.getHeight(); i++) {
 			for (int j = 0; j < ms.getWidth(); j++) {
-				System.out.print(ms.board.get(i).get(j).getState().getSurroundingMines());
+				System.out.print(ms.board.get(j).get(i).getState().getSurroundingMines());
 			}
 			System.out.println();
 		}
 
 	}
+
 	
 	
 

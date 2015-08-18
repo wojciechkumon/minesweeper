@@ -3,9 +3,9 @@ package minesweeper.model;
 import minesweeper.exceptions.PointOutOfBoardBounds;
 
 public class Field {
-	private final int x;
-	private final int y;
-	private MineState mineState;
+	private final short x;
+	private final short y;
+	private MineState mineState = MineState.SURROUNDING_0;
 	private FieldsBoard owner;
 	private ClickState clickState = ClickState.NOT_CLICKED;
 	
@@ -14,18 +14,18 @@ public class Field {
 		if (x < 0 || x >= owner.getHeight() || y < 0 || y >= owner.getWidth())
 			throw new PointOutOfBoardBounds("Mine coordinates out of bounds exception");
 			
-		this.x = x;
-		this.y = y;
+		this.x = (short)x;
+		this.y = (short)y;
 		this.owner = owner;
-		setState(MineState.SURROUNDING_0);
 	}
+	
 
 
 	public void calculateState() {
 		if (getState() != MineState.SURROUNDING_0) {
 			return;
 		}
-		mineState = MineState.getMineStateByInt(countSourroundingMines(getPosition()));	
+		mineState = MineState.getMineStateByInt(countSourroundingMineStates(MineState.MINE, getPosition()));	
 	}
 
 	private Position getPosition() {
@@ -61,156 +61,156 @@ public class Field {
 		}
 	}
 	
-	private int countSourroundingMines(Position position) {
+	private byte countSourroundingMineStates(MineState mineState, Position position) {
 		switch (position) {
 		case CENTER:
-			return countSourroundingMinesCenter();
+			return countSourroundingMineStatesCenter(mineState);
 		case TOP:
-			return countSourroundingMinesTop();
+			return countSourroundingMineStatesTop(mineState);
 		case BOTTOM:
-			return countSourroundingMinesBottom();
+			return countSourroundingMineStatesBottom(mineState);
 		case LEFT_SIDE:
-			return countSourroundingMinesLeftSide();
+			return countSourroundingMineStatesLeftSide(mineState);
 		case RIGHT_SIDE:
-			return countSourroundingMinesRightSide();
+			return countSourroundingMineStatesRightSide(mineState);
 		case LEFT_UPPER_CORNER:
-			return countSourroundingMinesLeftUpperCorner();
+			return countSourroundingMineStatesLeftUpperCorner(mineState);
 		case RIGHT_UPPER_CORNER:
-			return countSourroundingMinesRightUpperCorner();
+			return countSourroundingMineStatesRightUpperCorner(mineState);
 		case RIGHT_LOWER_CORNER:
-			return countSourroundingMinesRightLowerCorner();
+			return countSourroundingMineStatesRightLowerCorner(mineState);
 		default:
-			return countSourroundingMinesLeftLowerCorner();
+			return countSourroundingMineStatesLeftLowerCorner(mineState);
 		}
 	}
 	
-	private int countSourroundingMinesCenter() {
-		int sumOfMines = 0;
+	private byte countSourroundingMineStatesCenter(MineState mineState) {
+		byte sumOfMines = 0;
 		for (int i = 0; i < 3; i++) {
-			if (owner.get(x - 1 + i, y - 1).getState() == MineState.MINE)
+			if (owner.get(x - 1 + i, y - 1).getState() == mineState)
 				sumOfMines++;
-			if (owner.get(x - 1 + i, y + 1).getState() == MineState.MINE)
+			if (owner.get(x - 1 + i, y + 1).getState() == mineState)
 				sumOfMines++;
 		}
-		if (owner.get(x - 1, y).getState() == MineState.MINE)
+		if (owner.get(x - 1, y).getState() == mineState)
 			sumOfMines++;
-		if (owner.get(x + 1, y).getState() == MineState.MINE)
+		if (owner.get(x + 1, y).getState() == mineState)
 			sumOfMines++;
 	
 		return sumOfMines;
 	}
 
 
-	private int countSourroundingMinesTop() {
-		int sumOfMines = 0;
+	private byte countSourroundingMineStatesTop(MineState mineState) {
+		byte sumOfMines = 0;
 		for (int i = 0; i < 3; i++) {
-			if (owner.get(x - 1 + i, y + 1).getState() == MineState.MINE)
+			if (owner.get(x - 1 + i, y + 1).getState() == mineState)
 				sumOfMines++;
 		}
-		if (owner.get(x - 1, y).getState() == MineState.MINE)
+		if (owner.get(x - 1, y).getState() == mineState)
 			sumOfMines++;
-		if (owner.get(x + 1, y).getState() == MineState.MINE)
+		if (owner.get(x + 1, y).getState() == mineState)
 			sumOfMines++;
 	
 		return sumOfMines;
 	}
 
 
-	private int countSourroundingMinesBottom() {
-		int sumOfMines = 0;
+	private byte countSourroundingMineStatesBottom(MineState mineState) {
+		byte sumOfMines = 0;
 		for (int i = 0; i < 3; i++) {
-			if (owner.get(x - 1 + i, y - 1).getState() == MineState.MINE)
+			if (owner.get(x - 1 + i, y - 1).getState() == mineState)
 				sumOfMines++;
 		}
-		if (owner.get(x - 1, y).getState() == MineState.MINE)
+		if (owner.get(x - 1, y).getState() == mineState)
 			sumOfMines++;
-		if (owner.get(x + 1, y).getState() == MineState.MINE)
+		if (owner.get(x + 1, y).getState() == mineState)
 			sumOfMines++;
 	
 		return sumOfMines;
 	}
 
 
-	private int countSourroundingMinesLeftSide() {
-		int sumOfMines = 0;
+	private byte countSourroundingMineStatesLeftSide(MineState mineState) {
+		byte sumOfMines = 0;
 		for (int i = 0; i < 3; i++) {
-			if (owner.get(x + 1, y - 1 + i).getState() == MineState.MINE)
+			if (owner.get(x + 1, y - 1 + i).getState() == mineState)
 				sumOfMines++;
 		}
-		if (owner.get(x, y - 1).getState() == MineState.MINE)
+		if (owner.get(x, y - 1).getState() == mineState)
 			sumOfMines++;
-		if (owner.get(x, y + 1).getState() == MineState.MINE)
+		if (owner.get(x, y + 1).getState() == mineState)
 			sumOfMines++;
 	
 		return sumOfMines;
 	}
 
 
-	private int countSourroundingMinesRightSide() {
-		int sumOfMines = 0;
+	private byte countSourroundingMineStatesRightSide(MineState mineState) {
+		byte sumOfMines = 0;
 		for (int i = 0; i < 3; i++) {
-			if (owner.get(x - 1, y - 1 + i).getState() == MineState.MINE)
+			if (owner.get(x - 1, y - 1 + i).getState() == mineState)
 				sumOfMines++;
 		}
-		if (owner.get(x, y - 1).getState() == MineState.MINE)
+		if (owner.get(x, y - 1).getState() == mineState)
 			sumOfMines++;
-		if (owner.get(x, y + 1).getState() == MineState.MINE)
+		if (owner.get(x, y + 1).getState() == mineState)
 			sumOfMines++;
 	
 		return sumOfMines;
 	}
 
 
-	private int countSourroundingMinesLeftUpperCorner() {
-		int sumOfMines = 0;
+	private byte countSourroundingMineStatesLeftUpperCorner(MineState mineState) {
+		byte sumOfMines = 0;
 		
-		if (owner.get(x + 1, y).getState() == MineState.MINE)
+		if (owner.get(x + 1, y).getState() == mineState)
 			sumOfMines++;
-		if (owner.get(x, y + 1).getState() == MineState.MINE)
+		if (owner.get(x, y + 1).getState() == mineState)
 			sumOfMines++;
-		if (owner.get(x + 1, y + 1).getState() == MineState.MINE)
-			sumOfMines++;
-
-		return sumOfMines;
-	}
-
-
-	private int countSourroundingMinesRightUpperCorner() {
-		int sumOfMines = 0;
-
-		if (owner.get(x - 1, y).getState() == MineState.MINE)
-			sumOfMines++;
-		if (owner.get(x - 1, y + 1).getState() == MineState.MINE)
-			sumOfMines++;
-		if (owner.get(x, y + 1).getState() == MineState.MINE)
+		if (owner.get(x + 1, y + 1).getState() == mineState)
 			sumOfMines++;
 
 		return sumOfMines;
 	}
 
 
-	private int countSourroundingMinesRightLowerCorner() {
-		int sumOfMines = 0;
+	private byte countSourroundingMineStatesRightUpperCorner(MineState mineState) {
+		byte sumOfMines = 0;
 
-		if (owner.get(x - 1, y - 1).getState() == MineState.MINE)
+		if (owner.get(x - 1, y).getState() == mineState)
 			sumOfMines++;
-		if (owner.get(x, y - 1).getState() == MineState.MINE)
+		if (owner.get(x - 1, y + 1).getState() == mineState)
 			sumOfMines++;
-		if (owner.get(x - 1, y).getState() == MineState.MINE)
+		if (owner.get(x, y + 1).getState() == mineState)
 			sumOfMines++;
 
 		return sumOfMines;
 	}
 
 
-	private int countSourroundingMinesLeftLowerCorner() {
-		int sumOfMines = 0;
+	private byte countSourroundingMineStatesRightLowerCorner(MineState mineState) {
+		byte sumOfMines = 0;
 
-		if (owner.get(x, y - 1).getState() == MineState.MINE)
+		if (owner.get(x - 1, y - 1).getState() == mineState)
 			sumOfMines++;
-		if (owner.get(x + 1, y - 1).getState() == MineState.MINE)
+		if (owner.get(x, y - 1).getState() == mineState)
 			sumOfMines++;
-		if (owner.get(x + 1, y).getState() == MineState.MINE)
+		if (owner.get(x - 1, y).getState() == mineState)
+			sumOfMines++;
+
+		return sumOfMines;
+	}
+
+
+	private byte countSourroundingMineStatesLeftLowerCorner(MineState mineState) {
+		byte sumOfMines = 0;
+
+		if (owner.get(x, y - 1).getState() == mineState)
+			sumOfMines++;
+		if (owner.get(x + 1, y - 1).getState() == mineState)
+			sumOfMines++;
+		if (owner.get(x + 1, y).getState() == mineState)
 			sumOfMines++;
 
 		return sumOfMines;
@@ -219,11 +219,11 @@ public class Field {
 
 	
 	
-	public int getY() {
+	public short getY() {
 		return y;
 	}
 
-	public int getX() {
+	public short getX() {
 		return x;
 	}
 

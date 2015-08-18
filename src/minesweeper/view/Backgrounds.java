@@ -8,11 +8,12 @@ import javax.imageio.ImageIO;
 
 public class Backgrounds {
 
-	public final BufferedImage standardField;
+	private static Backgrounds instance = null;
+	public final BufferedImage field;
 	public final BufferedImage hoveredField;
 	public final BufferedImage clickedField;
 	
-	public final BufferedImage standardFlag;
+	public final BufferedImage flag;
 	public final BufferedImage hoveredFlag;
 	public final BufferedImage clickedFlag;
 	
@@ -31,82 +32,75 @@ public class Backgrounds {
 	public final BufferedImage minesCounter8;
 	
 	
-	public Backgrounds() throws IOException {
+	private Backgrounds() {
+		
+		BufferedImage[] images = new BufferedImage[17];
+		for (int i = 0; i < images.length; i++) {
+			images[i] = null;
+		}
+		
+		fillImages(images);
+		
+		field = images[0];
+		hoveredField = images[1];
+	 	clickedField = images[2];
+	 	
+	 	flag = images[3];
+	 	hoveredFlag = images[4];
+	 	clickedFlag = images[5];
+	 	
+	 	mine = images[6];
+	 	
+	 	background = images[7];
+	 	
+	 	minesCounter0 = images[8];
+	 	minesCounter1 = images[9];
+	 	minesCounter2 = images[10];
+	 	minesCounter3 = images[11];
+	 	minesCounter4 = images[12];
+	 	minesCounter5 = images[13];
+	 	minesCounter6 = images[14];
+	 	minesCounter7 = images[15];
+	 	minesCounter8 = images[16];	
+	 }
+	
+	private BufferedImage[] fillImages(BufferedImage[] images) {
 		String sep = File.separator;
-	 	standardField = ImageIO.read(new File("img"+sep+"field.jpg"));
-	 	hoveredField = ImageIO.read(new File("img"+sep+"fieldHovered.jpg"));
-	 	clickedField = ImageIO.read(new File("img"+sep+"fieldClicked.jpg"));
-	 	
-	 	standardFlag = ImageIO.read(new File("img"+sep+"flag.jpg"));
-	 	hoveredFlag = ImageIO.read(new File("img"+sep+"flagHovered.jpg"));
-	 	clickedFlag = ImageIO.read(new File("img"+sep+"flagClicked.jpg"));
-	 	
-	 	mine = ImageIO.read(new File("img"+sep+"mine.jpg"));
-	 	
-	 	background = ImageIO.read(new File("img"+sep+"background.jpg"));
-	 	
-	 	minesCounter0 = ImageIO.read(new File("img"+sep+"0.jpg"));
-	 	minesCounter1 = ImageIO.read(new File("img"+sep+"1.jpg"));
-	 	minesCounter2 = ImageIO.read(new File("img"+sep+"2.jpg"));
-	 	minesCounter3 = ImageIO.read(new File("img"+sep+"3.jpg"));
-	 	minesCounter4 = ImageIO.read(new File("img"+sep+"4.jpg"));
-	 	minesCounter5 = ImageIO.read(new File("img"+sep+"5.jpg"));
-	 	minesCounter6 = ImageIO.read(new File("img"+sep+"6.jpg"));
-	 	minesCounter7 = ImageIO.read(new File("img"+sep+"7.jpg"));
-	 	minesCounter8 = ImageIO.read(new File("img"+sep+"8.jpg"));
+		
+	 	try {
+	 		images[0] = ImageIO.read(new File("img"+sep+"field.jpg"));
+	 		images[1] = ImageIO.read(new File("img"+sep+"fieldHovered.jpg"));
+	 		images[2] = ImageIO.read(new File("img"+sep+"fieldClicked.jpg"));
+		 	
+	 		images[3] = ImageIO.read(new File("img"+sep+"flag.jpg"));
+	 		images[4] = ImageIO.read(new File("img"+sep+"flagHovered.jpg"));
+	 		images[5] = ImageIO.read(new File("img"+sep+"flagClicked.jpg"));
+		 	
+	 		images[6] = ImageIO.read(new File("img"+sep+"mine.jpg"));
+		 	
+	 		images[7] = ImageIO.read(new File("img"+sep+"background.jpg"));
+		 	
+	 		images[8] = ImageIO.read(new File("img"+sep+"0.jpg"));
+	 		images[9] = ImageIO.read(new File("img"+sep+"1.jpg"));
+	 		images[10] = ImageIO.read(new File("img"+sep+"2.jpg"));
+	 		images[11] = ImageIO.read(new File("img"+sep+"3.jpg"));
+	 		images[12] = ImageIO.read(new File("img"+sep+"4.jpg"));
+	 		images[13] = ImageIO.read(new File("img"+sep+"5.jpg"));
+	 		images[14] = ImageIO.read(new File("img"+sep+"6.jpg"));
+	 		images[15] = ImageIO.read(new File("img"+sep+"7.jpg"));
+	 		images[16] = ImageIO.read(new File("img"+sep+"8.jpg"));
+	 	} catch (IOException e) {
+			e.printStackTrace();
+		}
+	 	return images;
 	}
-
-
-	public BufferedImage getStandardField() {
-		return standardField;
-	}
-	public BufferedImage getHoveredField() {
-		return hoveredField;
-	}
-	public BufferedImage getClickedField() {
-		return clickedField;
-	}
-	public BufferedImage getStandardFlag() {
-		return standardFlag;
-	}
-	public BufferedImage getHoveredFlag() {
-		return hoveredFlag;
-	}
-	public BufferedImage getClickedFlag() {
-		return clickedFlag;
-	}
-	public BufferedImage getMine() {
-		return mine;
-	}
-	public BufferedImage getBackground() {
-		return background;
-	}
-	public BufferedImage getMinesCounter0() {
-		return minesCounter0;
-	}
-	public BufferedImage getMinesCounter1() {
-		return minesCounter1;
-	}
-	public BufferedImage getMinesCounter2() {
-		return minesCounter2;
-	}
-	public BufferedImage getMinesCounter3() {
-		return minesCounter3;
-	}
-	public BufferedImage getMinesCounter4() {
-		return minesCounter4;
-	}
-	public BufferedImage getMinesCounter5() {
-		return minesCounter5;
-	}
-	public BufferedImage getMinesCounter6() {
-		return minesCounter6;
-	}
-	public BufferedImage getMinesCounter7() {
-		return minesCounter7;
-	}
-	public BufferedImage getMinesCounter8() {
-		return minesCounter8;
+	
+	
+	
+	public static Backgrounds getInstace() {
+		if (instance == null)
+			instance = new Backgrounds();
+		return instance;
 	}
 	
 	

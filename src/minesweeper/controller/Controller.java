@@ -11,6 +11,7 @@ public class Controller {
 	public Controller(Model model, View view) {
 		this.view = view;
 		this.model = model;
+		mineBtnController = new MineButtonController(this);
 	}
 	
 	public View getView() {
@@ -27,6 +28,14 @@ public class Controller {
 
 	public void setModel(Model model) {
 		this.model = model;
+	}
+
+	public MineButtonController getMineBtnController() {
+		return mineBtnController;
+	}
+
+	public void setMineBtnController(MineButtonController mineBtnController) {
+		this.mineBtnController = mineBtnController;
 	}
 
 }
