@@ -31,7 +31,6 @@ public class MineButtonController implements MouseListener {
 		} else if (mineBtn.getImage() == Backgrounds.getInstace().flag) {
 			mineBtn.setImage(Backgrounds.getInstace().hoveredFlag);
 		}
-		mineBtn.repaint();
 	}
 
 	@Override
@@ -43,7 +42,6 @@ public class MineButtonController implements MouseListener {
 		} else if (mineBtn.getImage() == Backgrounds.getInstace().hoveredFlag) {
 			mineBtn.setImage(Backgrounds.getInstace().flag);
 		}
-		mineBtn.repaint();
 	}
 
 	@Override
@@ -55,7 +53,6 @@ public class MineButtonController implements MouseListener {
 		} else if (mineBtn.getImage() == Backgrounds.getInstace().hoveredFlag) {
 			mineBtn.setImage(Backgrounds.getInstace().clickedFlag);
 		}
-		mineBtn.repaint();
 	}
 	
 	@Override
@@ -73,7 +70,6 @@ public class MineButtonController implements MouseListener {
 		MineButton mineBtn = (MineButton) e.getSource();
 		BufferedImage btnImg = mineBtn.getImage();
 		Backgrounds bg = Backgrounds.getInstace();
-		// if not flag
 		
 		if (btnImg == bg.clickedField) {
 			if (isPointInBounds(e.getPoint(), 0, 0, MineButton.WIDTH, MineButton.HEIGHT)) {
@@ -96,9 +92,17 @@ public class MineButtonController implements MouseListener {
 		Backgrounds bg = Backgrounds.getInstace();
 		
 		if ((btnImg == bg.field) || (btnImg == bg.hoveredField) || (btnImg == bg.clickedField)) {
-			owner.getModel().changeToFlag(mineBtn);
+			if (isPointInBounds(e.getPoint(), 0, 0, MineButton.WIDTH, MineButton.HEIGHT)) {
+				owner.getModel().changeToFlag(mineBtn);
+			} else {
+				mineBtn.setImage(bg.field);
+			}
 		} else if ((btnImg == bg.flag) || (btnImg == bg.hoveredFlag) || (btnImg == bg.clickedFlag)) {
-			owner.getModel().removeFlag(mineBtn);
+			if (isPointInBounds(e.getPoint(), 0, 0, MineButton.WIDTH, MineButton.HEIGHT)) {
+				owner.getModel().removeFlag(mineBtn);
+			} else {
+				mineBtn.setImage(bg.flag);
+			}
 		}
 	}
 

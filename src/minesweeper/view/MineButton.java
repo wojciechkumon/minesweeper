@@ -23,9 +23,7 @@ public class MineButton extends JButton {
 		this.view = view;
 		this.x = x;
 		this.y = y;
-		image = Backgrounds.getInstace().field;
 		
-		addMouseListener(view.getController().getMineBtnController());
 		setSize(WIDTH, HEIGHT);
 	}
 	
@@ -36,7 +34,9 @@ public class MineButton extends JButton {
 		g2d.drawImage(image, 0, 0, this);
 	}
 
-	
+	public void resetImage() {
+		setImage(Backgrounds.getInstace().field);
+	}
 	
 	public BufferedImage getImage() {
 		return image;
@@ -44,6 +44,7 @@ public class MineButton extends JButton {
 
 	public void setImage(BufferedImage image) {
 		this.image = image;
+		repaint();
 	}
 
 	public int getXPostition() {

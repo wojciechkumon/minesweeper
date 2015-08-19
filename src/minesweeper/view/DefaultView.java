@@ -1,9 +1,12 @@
 package minesweeper.view;
 
 import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Observable;
+import java.util.function.Consumer;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -16,21 +19,29 @@ import minesweeper.model.Model;
 import minesweeper.model.Range;
 import minesweeper.model.UpdateBox;
 
-public class DefaultView extends JFrame implements View {
+public class DefaultView extends JFrame implements View, ActionListener {
 	private static final long serialVersionUID = -1786179871578950490L;
 	
-	private MineButton[][] mineBtns = new MineButton[16][30];
-	private int minesWidth;
-	private int minesHeight;
+	private static final int MAX_HORIZONTAL_MINES = 30;
+	private static final int MAX_VERTICAL_MINES = 16;
+	
+	private MineButton[][] mineBtns = new MineButton[MAX_VERTICAL_MINES][MAX_HORIZONTAL_MINES];
+	private int horizontalMines;
+	private int verticalMines;
+	private int minesAmount;
+	private int minesLeft;
+	
 	private Controller controller;
 	private JLabel lblMinesLeft, lblWinOrLose;
-	private JButton btnRestart, btnSettings;
+	private JButton restartBtn, settingsBtn;
+	private SetGameDialog setGameDialog;
 	
-	private int minesLeft;
+	
 	
 	public DefaultView() throws IOException {
 		super("MineSweeper by wojtas626");
 		init();
+		constructFields();
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		
@@ -40,6 +51,13 @@ public class DefaultView extends JFrame implements View {
 	@Override
 	public void setController(Controller controller) {
 		this.controller = controller;
+		applyController();
+	}
+
+	private void applyController() {
+		forEach(m -> m.addMouseListener(controller.getMineBtnController()));
+		restartBtn.addActionListener(controller.getRestartBtnController());
+		setGameDialog = new SetGameDialog(this);
 	}
 
 	@Override
@@ -94,7 +112,6 @@ public class DefaultView extends JFrame implements View {
 		Backgrounds bg = Backgrounds.getInstace();
 		
 		mineBtn.setImage(bg.getMinesCounterImage(fieldToUpdate.getMineState().getSurroundingMines()));
-		mineBtn.repaint();
 	}
 	
 	private void updateFlaggedField(Field fieldToUpdate) {
@@ -107,7 +124,6 @@ public class DefaultView extends JFrame implements View {
 			mineBtn.setImage(bg.hoveredFlag);
 		else
 			mineBtn.setImage(bg.flag);
-		mineBtn.repaint();
 	}
 	
 	private void updateNotClickedField(Field fieldToUpdate) {
@@ -120,43 +136,68 @@ public class DefaultView extends JFrame implements View {
 			mineBtn.setImage(bg.hoveredField);
 		else
 			mineBtn.setImage(bg.field);
-		mineBtn.repaint();
 	}
 
 	private void updateMinesLeft(Model model) {
 		minesLeft = model.getMinesLeft();
-		lblMinesLeft.setText(Integer.toString(minesLeft));
+		lblMinesLeft.setText("Mines left: "+Integer.toString(minesLeft));
 	}
 
 	private void updateRestart(Model model) {
-		// TODO Auto-generated method stub
+		horizontalMines = model.getHorizontalNumberOfMines();
+		verticalMines = model.getVerticalNumberOfMines();
+		updateMinesLeft(model);
+		minesAmount = minesLeft;
+		
+		//TODO
+		preprareFieldsForGame();
+		
+		this.repaint();
+		forEach(btn -> btn.resetImage());
 	}
 
 	
 	
-	public void makeFields(int width, int height) {
-		for (int i = 0; i < height; i++) {
-			for (int j = 0; j < width; j++) {
+	private void constructFields() {
+		for (int i = 0; i < MAX_VERTICAL_MINES; i++) {
+			for (int j = 0; j < MAX_HORIZONTAL_MINES; j++) {
 				mineBtns[i][j] = new MineButton(i, j, this);
 				mineBtns[i][j].setLocation(80 + j * MineButton.WIDTH, 80 + i * MineButton.HEIGHT);
-
 				add(mineBtns[i][j]);
 			}
 		}
-		if (width > 12) {
-			setSize(160 + MineButton.WIDTH * width, 140 + MineButton.HEIGHT * height);
-		} else {
-			setSize(160 + MineButton.WIDTH * 13, 140 + MineButton.HEIGHT * height);
-		}
-
 	}
+	
+	private void preprareFieldsForGame() {
+		forEach(m -> m.setVisible(false));
+		
+		for (int i = 0; i < verticalMines; i++)
+			for (int j = 0; j < horizontalMines; j++) {
+				mineBtns[i][j].setVisible(true);
+			}
+				
+		
+		if (horizontalMines > 12) {
+			setSize(160 + MineButton.WIDTH * horizontalMines, 140 + MineButton.HEIGHT * verticalMines);
+		} else {
+			setSize(160 + MineButton.WIDTH * 13, 140 + MineButton.HEIGHT * verticalMines);
+		}
+	}
+	
+	private void forEach(Consumer<MineButton> action) {
+		for (int i = 0; i < MAX_VERTICAL_MINES; i++) {
+			for (int j = 0; j < MAX_HORIZONTAL_MINES; j++) {
+				action.accept(mineBtns[i][j]);
+			}
+		}
+	}
+	
 	
 	private void init() {
 		setLayout(null);
 		setSize(1024, 800);
 		setLocation(100, 100);
 
-		// TODO
 		lblMinesLeft = new JLabel("Mines Left: " + 99);
 		lblMinesLeft.setBounds(80, 20, 200, 40);
 		lblMinesLeft.setFont(new Font("Arial", 0, 28));
@@ -167,33 +208,32 @@ public class DefaultView extends JFrame implements View {
 		lblWinOrLose.setFont(new Font("Arial", 0, 28));
 		add(lblWinOrLose);
 
-		btnRestart = new JButton("RESTART");
-		btnRestart.setBounds(450, 20, 100, 40);
-//		btnRestart.addActionListener(this);
-		add(btnRestart);
+		restartBtn = new JButton("RESTART");
+		restartBtn.setBounds(450, 20, 100, 40);
+		add(restartBtn);
 
-		btnSettings = new JButton("Settings");
-		btnSettings.setBounds(570, 20, 100, 40);
-//		btnSettings.addActionListener(this);
-		add(btnSettings);
+		settingsBtn = new JButton("Settings");
+		settingsBtn.setBounds(570, 20, 100, 40);
+		settingsBtn.addActionListener(this);
+		add(settingsBtn);
 	}
 	
 	
 	
 	public int getMinesWidth() {
-		return minesWidth;
+		return horizontalMines;
 	}
 
 	public void setMinesWidth(int minesWidth) {
-		this.minesWidth = minesWidth;
+		this.horizontalMines = minesWidth;
 	}
 
 	public int getMinesHeight() {
-		return minesHeight;
+		return verticalMines;
 	}
 
 	public void setMinesHeight(int minesHeight) {
-		this.minesHeight = minesHeight;
+		this.verticalMines = minesHeight;
 	}
 
 	public Controller getController() {
@@ -208,8 +248,28 @@ public class DefaultView extends JFrame implements View {
 		this.minesLeft = minesLeft;
 	}
 	
+	public int getMinesAmount() {
+		return minesAmount;
+	}
+
+	public void setMinesAmount(int minesAmount) {
+		this.minesAmount = minesAmount;
+	}
+
+	public SetGameDialog getSetGameDialog() {
+		return setGameDialog;
+	}
+
 	public MineButton get(int x, int y) {
 		return mineBtns[x][y];
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		if (e.getSource() == settingsBtn) {
+			setGameDialog.showDialog();
+		}
+		
 	}
 
 }

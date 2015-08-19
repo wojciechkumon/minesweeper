@@ -1,5 +1,7 @@
 package minesweeper.model;
 
+import java.util.Observer;
+
 import minesweeper.exceptions.AmountOutOfRange;
 import minesweeper.exceptions.PointOutOfBoardBounds;
 import minesweeper.view.MineButton;
@@ -42,6 +44,20 @@ public class DefaultModel extends Model {
 	}
 	
 	@Override
+	public void restartGame() {
+		fieldsBoard.restartGame();
+	}
+
+	@Override
+	public void restartGame(int horizontalMines, int verticalMines, int mines) {
+		try {
+			fieldsBoard.restartGame(horizontalMines, verticalMines, mines);
+		} catch (AmountOutOfRange | PointOutOfBoardBounds e) {
+			e.printStackTrace();
+		}
+	}
+	
+	@Override
 	public void setChanges() {
 		setChanged();
 	}
@@ -58,15 +74,52 @@ public class DefaultModel extends Model {
 
 	@Override
 	public int getVerticalNumberOfMines() {
-		// TODO Auto-generated method stub
-		return 0;
+		return fieldsBoard.getVerticalMines();
 	}
 
 	@Override
 	public int getNumberOfMines() {
-		// TODO Auto-generated method stub
-		return 0;
+		return fieldsBoard.getMinesToSet();
 	}
 	
+	@Override
+	public void addObserver(Observer o) {
+		super.addObserver(o);
+		UpdateBox updateBox = new UpdateBox();
+		updateBox.setNeededRestart(true);
+		setChanged();
+		notifyObservers(updateBox);
+	}
+
+	@Override
+	public int getMinHorizontalFields() {
+		return FieldsBoard.MIN_HORIZONTAL_FIELDS;
+	}
+
+	@Override
+	public int getMaxHorizontalFields() {
+		return FieldsBoard.MAX_HORIZONTAL_FIELDS;
+	}
+
+	@Override
+	public int getMinVerticalFields() {
+		return FieldsBoard.MIN_VERTICAL_FIELDS;
+	}
+
+	@Override
+	public int getMaxVerticalFields() {
+		return FieldsBoard.MAX_VERTICAL_FIELDS;
+	}
+
+	@Override
+	public int getMinAmountOfMines() {
+		return FieldsBoard.MIN_AMOUNT_OF_MINES;
+	}
+
+	@Override
+	public int getMaxAmountOfMines() {
+		return FieldsBoard.MAX_AMOUNT_OF_MINES;
+	}
+
 	
 }

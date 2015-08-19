@@ -5,6 +5,9 @@ import minesweeper.view.View;
 
 public class Controller {
 	private MineButtonController mineBtnController;
+	private RestartButtonController restartBtnController;
+	private ChangeSettingsButtonController changeSettingsBtnController;
+	
 	private View view;
 	private Model model;
 	
@@ -12,6 +15,8 @@ public class Controller {
 		this.view = view;
 		this.model = model;
 		mineBtnController = new MineButtonController(this);
+		restartBtnController = new RestartButtonController(this);
+		changeSettingsBtnController = new ChangeSettingsButtonController(this);
 	}
 	
 	public View getView() {
@@ -36,6 +41,22 @@ public class Controller {
 
 	public void setMineBtnController(MineButtonController mineBtnController) {
 		this.mineBtnController = mineBtnController;
+	}
+
+	public RestartButtonController getRestartBtnController() {
+		return restartBtnController;
+	}
+
+	public void setRestartBtnController(RestartButtonController restartBtnController) {
+		this.restartBtnController = restartBtnController;
+	}
+
+	public ChangeSettingsButtonController getChangeSettingsBtnController() {
+		return changeSettingsBtnController;
+	}
+
+	public void setChangeSettingsBtnController(ChangeSettingsButtonController changeSettingsBtnController) {
+		this.changeSettingsBtnController = changeSettingsBtnController;
 	}
 
 }

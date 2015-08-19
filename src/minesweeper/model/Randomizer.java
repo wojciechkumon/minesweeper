@@ -9,17 +9,11 @@ public class Randomizer {
 
 	private Random rnd = new Random();
 	
-	public int[] getRandomMineNumbers(int minesToPlace, int numberOfFields) throws AmountOutOfRange {
+	public int[] getRandomMineNumbers(int minesToPlace, int numberOfFields) {
 		return getRandomMineNumbersWithoutOne(minesToPlace, numberOfFields, -1);
 	}
 	
-	public int[] getRandomMineNumbersWithoutOne(int minesToPlace, int numberOfFields, int fieldNumberToSkip) throws AmountOutOfRange {
-		if (numberOfFields <= 1)
-			throw new AmountOutOfRange("Wrong number of fields");
-		if (minesToPlace <= 0 || minesToPlace >= numberOfFields)
-			throw new AmountOutOfRange("Wrong number of mines to place");
-		
-		
+	public int[] getRandomMineNumbersWithoutOne(int minesToPlace, int numberOfFields, int fieldNumberToSkip) {
 		int[] arrayOfRandomNumbers = new int[minesToPlace];
 		int randomNumber;
 		
@@ -47,19 +41,14 @@ public class Randomizer {
 	public static void main(String[] args) {
 		Randomizer rnd = new Randomizer();
 		int[] t;
-			
-		try {
-			long time1 = System.nanoTime();
-			t = rnd.getRandomMineNumbers(99, 480);
-			long time2 = System.nanoTime();
-			Arrays.sort(t);
-//			System.out.println(Arrays.toString(t));
-			System.out.println(time2-time1);
-		} catch (AmountOutOfRange e) {
-			e.printStackTrace();
-		}
-		
-		
+
+		long time1 = System.nanoTime();
+		t = rnd.getRandomMineNumbers(99, 480);
+		long time2 = System.nanoTime();
+		Arrays.sort(t);
+		// System.out.println(Arrays.toString(t));
+		System.out.println(time2 - time1);
+
 	}
 
 

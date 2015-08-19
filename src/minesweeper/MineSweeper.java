@@ -14,12 +14,10 @@ public class MineSweeper {
 		try {
 			model = new DefaultModel();
 			view = new DefaultView();
-			
-			model.addObserver(view);
 			controller = new Controller(model, view);
 			view.setController(controller);
+			model.addObserver(view);
 			view.setVisible(true);
-			view.makeFields(20, 10);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
