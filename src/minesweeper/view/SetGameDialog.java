@@ -1,6 +1,5 @@
 package minesweeper.view;
 
-import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
@@ -81,8 +80,8 @@ public class SetGameDialog extends JDialog {
 	}
 	
 	private void resetTextFields() {
-		txtFldHorizontalFields.setText(Integer.toString(owner.getMinesWidth()));
-		txtFldVerticalFields.setText(Integer.toString(owner.getMinesHeight()));
+		txtFldHorizontalFields.setText(Integer.toString(owner.getHorizontalMineButtonsAmount()));
+		txtFldVerticalFields.setText(Integer.toString(owner.getVerticalMineButtonsAmount()));
 		txtFldMines.setText(Integer.toString(owner.getMinesAmount()));
 	}
 

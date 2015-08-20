@@ -4,7 +4,6 @@ import java.util.Observer;
 
 import minesweeper.exceptions.AmountOutOfRange;
 import minesweeper.exceptions.PointOutOfBoardBounds;
-import minesweeper.view.MineButton;
 
 public class DefaultModel extends Model {
 	private FieldsBoard fieldsBoard;
@@ -19,28 +18,28 @@ public class DefaultModel extends Model {
 
 
 	@Override
-	public void changeToFlag(MineButton mineBtn) {
-		fieldsBoard.changeToFlag(mineBtn);
+	public void changeToFlag(Field field) {
+		fieldsBoard.changeToFlag(field);
 	}
 
 	@Override
-	public void removeFlag(MineButton mineBtn) {
-		fieldsBoard.removeFlag(mineBtn);
+	public void removeFlag(Field field) {
+		fieldsBoard.removeFlag(field);
 	}
 
 	@Override
-	public void checkField(MineButton mineBtn) {
-		fieldsBoard.checkField(mineBtn);
+	public void checkField(Field field) {
+		fieldsBoard.checkField(field);
 	}
 
 	@Override
-	public boolean isAreaRevealPossible(MineButton mineBtn) {
-		return fieldsBoard.isAreaRevealPossible(mineBtn);
+	public boolean isAreaRevealPossible(Field field) {
+		return fieldsBoard.isAreaRevealPossible(field);
 	}
 
 	@Override
-	public void doAreaReveal(MineButton mineBtn) {
-		fieldsBoard.doAreaReveal(mineBtn);
+	public void doAreaReveal(Field field) {
+		fieldsBoard.doAreaReveal(field);
 	}
 	
 	@Override

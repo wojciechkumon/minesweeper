@@ -3,8 +3,6 @@ package minesweeper.model;
 import java.util.Arrays;
 import java.util.Random;
 
-import minesweeper.exceptions.AmountOutOfRange;
-
 public class Randomizer {
 
 	private Random rnd = new Random();

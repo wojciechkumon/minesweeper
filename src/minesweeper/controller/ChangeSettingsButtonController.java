@@ -39,7 +39,8 @@ public class ChangeSettingsButtonController implements ActionListener {
 			Model model = owner.getModel();
 			if (isOk && isInRange(horizontalFields, model.getMinHorizontalFields(), model.getMaxHorizontalFields())
 					&& isInRange(verticalFields, model.getMinVerticalFields(), model.getMaxVerticalFields())
-					&& isInRange(mines, model.getMinAmountOfMines(), model.getMaxAmountOfMines())) {
+					&& isInRange(mines, model.getMinAmountOfMines(), model.getMaxAmountOfMines()) 
+					&& mines < horizontalFields*verticalFields) {
 
 				owner.getModel().restartGame(horizontalFields, verticalFields, mines);
 				dialog.setVisible(false);

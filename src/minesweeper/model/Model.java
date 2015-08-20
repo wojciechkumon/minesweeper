@@ -2,15 +2,13 @@ package minesweeper.model;
 
 import java.util.Observable;
 
-import minesweeper.view.MineButton;
-
 public abstract class Model extends Observable {
 
-	public abstract void changeToFlag(MineButton mineBtn);
-	public abstract void removeFlag(MineButton mineBtn);
-	public abstract void checkField(MineButton mineBtn);
-	public abstract boolean isAreaRevealPossible(MineButton mineBtn);
-	public abstract void doAreaReveal(MineButton mineBtn);
+	public abstract void changeToFlag(Field field);
+	public abstract void removeFlag(Field field);
+	public abstract void checkField(Field field);
+	public abstract boolean isAreaRevealPossible(Field field);
+	public abstract void doAreaReveal(Field field);
 	public abstract void restartGame();
 	public abstract void restartGame(int horizontalMines, int verticalMines, int mines);
 	

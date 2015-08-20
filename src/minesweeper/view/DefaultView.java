@@ -26,13 +26,13 @@ public class DefaultView extends JFrame implements View, ActionListener {
 	private static final int MAX_VERTICAL_MINES = 16;
 	
 	private MineButton[][] mineBtns = new MineButton[MAX_VERTICAL_MINES][MAX_HORIZONTAL_MINES];
-	private int horizontalMines;
-	private int verticalMines;
+	private int horizontalMineButtons;
+	private int verticalMineButtons;
 	private int minesAmount;
 	private int minesLeft;
 	
 	private Controller controller;
-	private JLabel lblMinesLeft, lblWinOrLose;
+	private JLabel lblMinesLeft;
 	private JButton restartBtn, settingsBtn;
 	private SetGameDialog setGameDialog;
 	
@@ -82,27 +82,27 @@ public class DefaultView extends JFrame implements View, ActionListener {
 
 	
 	private void win(Model model) {
-		for (int i = 0; i < verticalMines; i++) {
-			for (int j = 0; j < horizontalMines; j++) {
+		for (int i = 0; i < verticalMineButtons; i++) {
+			for (int j = 0; j < horizontalMineButtons; j++) {
 				Field field = model.getField(i, j);
 				updateField(model, field);
 			}
 		}
 		
 		controller.getMineBtnController().setGameActive(false);
-		lblWinOrLose.setText("You won!");
+		lblMinesLeft.setText("You won!");
 	}
 
 	private void lose(Model model) {
-		for (int i = 0; i < verticalMines; i++) {
-			for (int j = 0; j < horizontalMines; j++) {
+		for (int i = 0; i < verticalMineButtons; i++) {
+			for (int j = 0; j < horizontalMineButtons; j++) {
 				Field field = model.getField(i, j);
 				updateField(model, field);
 			}
 		}
 		
 		controller.getMineBtnController().setGameActive(false);
-		lblWinOrLose.setText("You lose!");
+		lblMinesLeft.setText("You lose!");
 	}
 
 	private void updateFields(Model model, ArrayList<Field> fieldsToUpdate) {
@@ -122,14 +122,14 @@ public class DefaultView extends JFrame implements View, ActionListener {
 	}
 
 	private void updateClickedField(Field fieldToUpdate) {
-		MineButton mineBtn = get(fieldToUpdate.getX(), fieldToUpdate.getY());
+		MineButton mineBtn = getMineButton(fieldToUpdate.getX(), fieldToUpdate.getY());
 		Backgrounds bg = Backgrounds.getInstace();
 		
 		mineBtn.setImage(bg.getMinesCounterImage(fieldToUpdate.getMineState().getSurroundingMines()));
 	}
 	
 	private void updateFlaggedField(Field fieldToUpdate) {
-		MineButton mineBtn = get(fieldToUpdate.getX(), fieldToUpdate.getY());
+		MineButton mineBtn = getMineButton(fieldToUpdate.getX(), fieldToUpdate.getY());
 		Backgrounds bg = Backgrounds.getInstace();
 
 		if ((mineBtn.getMousePosition() != null)
@@ -141,7 +141,7 @@ public class DefaultView extends JFrame implements View, ActionListener {
 	}
 	
 	private void updateNotClickedField(Field fieldToUpdate) {
-		MineButton mineBtn = get(fieldToUpdate.getX(), fieldToUpdate.getY());
+		MineButton mineBtn = getMineButton(fieldToUpdate.getX(), fieldToUpdate.getY());
 		Backgrounds bg = Backgrounds.getInstace();
 		
 		if ((mineBtn.getMousePosition() != null)
@@ -158,13 +158,12 @@ public class DefaultView extends JFrame implements View, ActionListener {
 	}
 
 	private void updateRestart(Model model) {
-		horizontalMines = model.getHorizontalNumberOfMines();
-		verticalMines = model.getVerticalNumberOfMines();
+		horizontalMineButtons = model.getHorizontalNumberOfMines();
+		verticalMineButtons = model.getVerticalNumberOfMines();
 		updateMinesLeft(model);
-		lblWinOrLose.setText("");
 		minesAmount = minesLeft;
 		
-		preprareFieldsForGame();
+		preprareMineButtonsForGame();
 		
 		forEach(btn -> btn.resetImage());
 		controller.getMineBtnController().setGameActive(true);
@@ -182,20 +181,15 @@ public class DefaultView extends JFrame implements View, ActionListener {
 		}
 	}
 	
-	private void preprareFieldsForGame() {
+	private void preprareMineButtonsForGame() {
 		forEach(m -> m.setVisible(false));
 		
-		for (int i = 0; i < verticalMines; i++)
-			for (int j = 0; j < horizontalMines; j++) {
+		for (int i = 0; i < verticalMineButtons; i++)
+			for (int j = 0; j < horizontalMineButtons; j++) {
 				mineBtns[i][j].setVisible(true);
 			}
 				
-		
-		if (horizontalMines > 12) {
-			setSize(160 + MineButton.WIDTH * horizontalMines, 140 + MineButton.HEIGHT * verticalMines);
-		} else {
-			setSize(160 + MineButton.WIDTH * 13, 140 + MineButton.HEIGHT * verticalMines);
-		}
+		setSize(160 + MineButton.WIDTH * horizontalMineButtons, 140 + MineButton.HEIGHT * verticalMineButtons);
 	}
 	
 	private void forEach(Consumer<MineButton> action) {
@@ -217,37 +211,32 @@ public class DefaultView extends JFrame implements View, ActionListener {
 		lblMinesLeft.setFont(new Font("Arial", 0, 28));
 		add(lblMinesLeft);
 
-		lblWinOrLose = new JLabel("");
-		lblWinOrLose.setBounds(300, 20, 150, 40);
-		lblWinOrLose.setFont(new Font("Arial", 0, 28));
-		add(lblWinOrLose);
-
 		restartBtn = new JButton("RESTART");
-		restartBtn.setBounds(450, 20, 100, 40);
+		restartBtn.setBounds(280, 20, 100, 40);
 		add(restartBtn);
 
 		settingsBtn = new JButton("Settings");
-		settingsBtn.setBounds(570, 20, 100, 40);
+		settingsBtn.setBounds(400, 20, 100, 40);
 		settingsBtn.addActionListener(this);
 		add(settingsBtn);
 	}
 	
 	
 	
-	public int getMinesWidth() {
-		return horizontalMines;
+	public int getHorizontalMineButtonsAmount() {
+		return horizontalMineButtons;
 	}
 
-	public void setMinesWidth(int minesWidth) {
-		this.horizontalMines = minesWidth;
+	public void setHorizontalMineButtonsAmount(int minesWidth) {
+		this.horizontalMineButtons = minesWidth;
 	}
 
-	public int getMinesHeight() {
-		return verticalMines;
+	public int getVerticalMineButtonsAmount() {
+		return verticalMineButtons;
 	}
 
-	public void setMinesHeight(int minesHeight) {
-		this.verticalMines = minesHeight;
+	public void setVerticalMineButtonsAmount(int minesHeight) {
+		this.verticalMineButtons = minesHeight;
 	}
 
 	public Controller getController() {
@@ -274,7 +263,7 @@ public class DefaultView extends JFrame implements View, ActionListener {
 		return setGameDialog;
 	}
 
-	public MineButton get(int x, int y) {
+	public MineButton getMineButton(int x, int y) {
 		return mineBtns[x][y];
 	}
 

@@ -6,7 +6,6 @@ import java.util.function.Consumer;
 
 import minesweeper.exceptions.AmountOutOfRange;
 import minesweeper.exceptions.PointOutOfBoardBounds;
-import minesweeper.view.MineButton;
 
 public class FieldsBoard {
 	private int horizontalMines;
@@ -64,13 +63,13 @@ public class FieldsBoard {
 		}
 	}
 	
-	public void setMines(MineButton mineBtn) {
-		placeMines(mineBtn);
+	public void setMines(Field field) {
+		placeMines(field);
 		setFieldStates();
 	}
 	
-	private void placeMines(MineButton mineBtn) {
-		int fieldNumberToSkip = mineBtn.getXPostition() * horizontalMines + mineBtn.getYPostition(); 
+	private void placeMines(Field field) {
+		int fieldNumberToSkip = field.getX() * horizontalMines + field.getY(); 
 		int[] minesNumbers = randomizer.getRandomMineNumbersWithoutOne(minesToSet, horizontalMines*verticalMines, fieldNumberToSkip);
 		Arrays.sort(minesNumbers);
 		
@@ -127,9 +126,7 @@ public class FieldsBoard {
 
 	
 	
-	public void changeToFlag(MineButton mineBtn) {
-		Field field = get(mineBtn.getXPostition(), mineBtn.getYPostition());
-		
+	public void changeToFlag(Field field) {
 		if (field.getClickState() != ClickState.NOT_CLICKED)
 			return;
 		
@@ -143,9 +140,7 @@ public class FieldsBoard {
 		owner.notifyObservers(updateBox);
 	}
 
-	public void removeFlag(MineButton mineBtn) {
-		Field field = get(mineBtn.getXPostition(), mineBtn.getYPostition());
-		
+	public void removeFlag(Field field) {
 		if (field.getClickState() != ClickState.FLAG)
 			return;
 		
@@ -160,18 +155,15 @@ public class FieldsBoard {
 		owner.notifyObservers(updateBox);
 	}
 	
-	public void checkField(MineButton mineBtn) {
-		Field field = get(mineBtn.getXPostition(), mineBtn.getYPostition());
-		if (isFirstClick) {
-			setMines(mineBtn);
-			isFirstClick = false;
-		}
-		checkField(field);
-	}
-	
 	public void checkField(Field field) {
 		if (field.getClickState() != ClickState.NOT_CLICKED)
 			return;
+		
+		if (isFirstClick) {
+			setMines(field);
+			isFirstClick = false;
+		}
+
 		field.clickField();
 		
 		UpdateBox updateBox = new UpdateBox();
@@ -193,23 +185,20 @@ public class FieldsBoard {
 	
 	private void clickAllSurrounding(Field field) {
 		Field[] surroundingFields = field.getSurroundingFields();
-		System.out.println(surroundingFields.length);
 		
 		for (int i = 0; i < surroundingFields.length; i++) {
 			checkField(surroundingFields[i]);
 		}
 	}
 
-	public boolean isAreaRevealPossible(MineButton mineBtn) {
-		Field field = get(mineBtn.getXPostition(), mineBtn.getYPostition());
-	
+	public boolean isAreaRevealPossible(Field field) {
 		if (field.isAreaClickPossible())
 			return true;
 		return false;
 	}
 	
-	public void doAreaReveal(MineButton mineBtn) {
-		// TODO Auto-generated method stub
+	public void doAreaReveal(Field field) {
+		clickAllSurrounding(field);
 	}
 	
 	private void doWin() {
@@ -303,7 +292,7 @@ public class FieldsBoard {
 			long time1 = System.currentTimeMillis();
 			fldBrd = new FieldsBoard(null, 30, 16, 99);
 			long time2 = System.currentTimeMillis();
-			fldBrd.setMines(new MineButton(0, 1, null));
+			fldBrd.setMines(new Field(0, 1, null));
 			long time3 = System.currentTimeMillis();
 			System.out.println(time2-time1);
 			System.out.println(time3-time2);
