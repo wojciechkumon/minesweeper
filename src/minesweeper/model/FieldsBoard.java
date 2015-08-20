@@ -170,23 +170,34 @@ public class FieldsBoard {
 	}
 	
 	public void checkField(Field field) {
-		
+		if (field.getClickState() != ClickState.NOT_CLICKED)
+			return;
 		field.clickField();
-		if (field.getMineState() == MineState.SURROUNDING_0)
-			clickAllSurrounding(field);
 		
 		UpdateBox updateBox = new UpdateBox();
 		updateBox.addFieldToUpdate(field);
-		if (field.isMine())
+		if (field.isMine()) {
 			updateBox.setLose(true);
+			doLose();
+		} else if (isWin()) {
+			updateBox.setWin(true);
+			doWin();
+		}
+			
 		
 		owner.setChanges();
 		owner.notifyObservers(updateBox);
+		if (field.getMineState() == MineState.SURROUNDING_0)
+			clickAllSurrounding(field);
 	}
 	
 	private void clickAllSurrounding(Field field) {
-//		field.getFieldPosition()
-//TODO		
+		Field[] surroundingFields = field.getSurroundingFields();
+		System.out.println(surroundingFields.length);
+		
+		for (int i = 0; i < surroundingFields.length; i++) {
+			checkField(surroundingFields[i]);
+		}
 	}
 
 	public boolean isAreaRevealPossible(MineButton mineBtn) {
@@ -199,13 +210,27 @@ public class FieldsBoard {
 	
 	public void doAreaReveal(MineButton mineBtn) {
 		// TODO Auto-generated method stub
-		
+	}
+	
+	private void doWin() {
+		forEach(fld -> {
+			if (fld.getMineState() == MineState.MINE)
+				fld.setClickState(ClickState.FLAG);
+			else
+				fld.setClickState(ClickState.CLICKED);
+		});
+	}
+	
+	private void doLose() {
+		forEach(fld -> fld.setClickState(ClickState.CLICKED));
 	}
 	
 	public void restartGame() {
 		forEach(fld -> fld.setClickState(ClickState.NOT_CLICKED));
 		forEach(fld -> fld.setMineState(MineState.SURROUNDING_0));
 		isFirstClick = true;
+		
+		minesLeft = minesToSet;
 		
 		UpdateBox updateBox = new UpdateBox();
 		updateBox.setNeededRestart(true);
@@ -224,7 +249,18 @@ public class FieldsBoard {
 		owner.notifyObservers(updateBox);
 	}
 	
-	
+	private boolean isWin() {
+		int sum = 0;
+		for (ArrayList<Field> arr: board) {
+			for (Field fld: arr) {
+				if (fld.getClickState() != ClickState.CLICKED)
+					++sum;
+			}
+		}
+		if (sum == minesToSet)
+			return true;
+		return false;
+	}
 	
 	
 	public Field get(int x, int y) {

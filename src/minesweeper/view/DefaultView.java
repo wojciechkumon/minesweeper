@@ -73,22 +73,36 @@ public class DefaultView extends JFrame implements View, ActionListener {
 				if (updateBox.getFieldsToUpdate() != null)
 					updateFields(model, updateBox.getFieldsToUpdate());
 				if (updateBox.isLose())
-					lose();
+					lose(model);
 				else if (updateBox.isWin())
-					win();
+					win(model);
 			}
 		}
 	}
 
 	
-	private void win() {
-		// TODO Auto-generated method stub
-		System.out.println("win");
+	private void win(Model model) {
+		for (int i = 0; i < verticalMines; i++) {
+			for (int j = 0; j < horizontalMines; j++) {
+				Field field = model.getField(i, j);
+				updateField(model, field);
+			}
+		}
+		
+		controller.getMineBtnController().setGameActive(false);
+		lblWinOrLose.setText("You won!");
 	}
 
-	private void lose() {
-		// TODO Auto-generated method stub
-		System.out.println("lose");
+	private void lose(Model model) {
+		for (int i = 0; i < verticalMines; i++) {
+			for (int j = 0; j < horizontalMines; j++) {
+				Field field = model.getField(i, j);
+				updateField(model, field);
+			}
+		}
+		
+		controller.getMineBtnController().setGameActive(false);
+		lblWinOrLose.setText("You lose!");
 	}
 
 	private void updateFields(Model model, ArrayList<Field> fieldsToUpdate) {
@@ -147,13 +161,13 @@ public class DefaultView extends JFrame implements View, ActionListener {
 		horizontalMines = model.getHorizontalNumberOfMines();
 		verticalMines = model.getVerticalNumberOfMines();
 		updateMinesLeft(model);
+		lblWinOrLose.setText("");
 		minesAmount = minesLeft;
 		
-		//TODO
 		preprareFieldsForGame();
 		
-		this.repaint();
 		forEach(btn -> btn.resetImage());
+		controller.getMineBtnController().setGameActive(true);
 	}
 
 	

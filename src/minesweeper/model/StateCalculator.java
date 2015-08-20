@@ -2,6 +2,136 @@ package minesweeper.model;
 
 public class StateCalculator {
 	
+	
+	public static Field[] getSurroundingFields(Field field) {
+		Position position = field.getFieldPosition();
+		switch (position) {
+		case CENTER:
+			return getSurroundingFieldsCenter(field);
+		case TOP:
+			return getSurroundingFieldsTop(field);
+		case BOTTOM:
+			return getSurroundingFieldsBottom(field);
+		case LEFT_SIDE:
+			return getSurroundingFieldsLeftSide(field);
+		case RIGHT_SIDE:
+			return getSurroundingFieldsRightSide(field);
+		case LEFT_UPPER_CORNER:
+			return getSurroundingFieldsLeftUpperCorner(field);
+		case RIGHT_UPPER_CORNER:
+			return getSurroundingFieldsRightUpperCorner(field);
+		case RIGHT_LOWER_CORNER:
+			return getSurroundingFieldsRightLowerCorner(field);
+		default:
+			return getSurroundingFieldsLeftLowerCorner(field);
+		}
+	}
+	
+	private static Field[] getSurroundingFieldsCenter(Field field) {
+		Field[] fields = new Field[8];
+		
+		for (int i = 0; i < 3; i++) {
+			fields[i] = field.getOwner().get(field.getX() - 1 + i, field.getY() - 1);
+			fields[i + 3] = field.getOwner().get(field.getX() - 1 + i, field.getY() + 1);
+		}
+		fields[6] = field.getOwner().get(field.getX() - 1, field.getY());
+		fields[7] = field.getOwner().get(field.getX() + 1, field.getY());
+		
+		return fields;
+	}
+
+	private static Field[] getSurroundingFieldsTop(Field field) {
+		Field[] fields = new Field[5];
+		
+		for (int i = 0; i < 3; i++) {
+			fields[i] = field.getOwner().get(field.getX() - 1 + i, field.getY() + 1);
+		}
+		
+		fields[3] = field.getOwner().get(field.getX() - 1, field.getY());
+		fields[4] = field.getOwner().get(field.getX() + 1, field.getY());
+		
+		return fields;
+	}
+
+	private static Field[] getSurroundingFieldsBottom(Field field) {
+		Field[] fields = new Field[5];
+		
+		for (int i = 0; i < 3; i++) {
+			fields[i] = field.getOwner().get(field.getX() - 1 + i, field.getY() - 1);
+		}
+		
+		fields[3] = field.getOwner().get(field.getX() - 1, field.getY());
+		fields[4] = field.getOwner().get(field.getX() + 1, field.getY());
+		
+		return fields;
+	}
+
+	private static Field[] getSurroundingFieldsLeftSide(Field field) {
+		Field[] fields = new Field[5];
+		
+		for (int i = 0; i < 3; i++) {
+			fields[i] = field.getOwner().get(field.getX() + 1, field.getY() - 1 + i);
+		}
+		
+		fields[3] = field.getOwner().get(field.getX(), field.getY() - 1);
+		fields[4] = field.getOwner().get(field.getX(), field.getY() + 1);
+		
+		return fields;
+	}
+
+	private static Field[] getSurroundingFieldsRightSide(Field field) {
+		Field[] fields = new Field[5];
+		
+		for (int i = 0; i < 3; i++) {
+			fields[i] = field.getOwner().get(field.getX() - 1, field.getY() - 1 + i);
+		}
+		
+		fields[3] = field.getOwner().get(field.getX(), field.getY() - 1);
+		fields[4] = field.getOwner().get(field.getX(), field.getY() + 1);
+		
+		return fields;
+	}
+
+	private static Field[] getSurroundingFieldsLeftUpperCorner(Field field) {
+		Field[] fields = new Field[3];
+		
+		fields[0] = field.getOwner().get(field.getX() + 1, field.getY());
+		fields[1] = field.getOwner().get(field.getX(), field.getY() + 1);
+		fields[2] = field.getOwner().get(field.getX() + 1, field.getY() + 1);
+		
+		return fields;
+	}
+
+	private static Field[] getSurroundingFieldsRightUpperCorner(Field field) {
+		Field[] fields = new Field[3];
+		
+		fields[0] = field.getOwner().get(field.getX() - 1, field.getY());
+		fields[1] = field.getOwner().get(field.getX() - 1, field.getY() + 1);
+		fields[2] = field.getOwner().get(field.getX(), field.getY() + 1);
+		
+		return fields;
+	}
+
+	private static Field[] getSurroundingFieldsRightLowerCorner(Field field) {
+		Field[] fields = new Field[3];
+		
+		fields[0] = field.getOwner().get(field.getX() - 1, field.getY() - 1);
+		fields[1] = field.getOwner().get(field.getX(), field.getY() - 1);
+		fields[2] = field.getOwner().get(field.getX() - 1, field.getY());
+		
+		return fields;
+	}
+
+	private static Field[] getSurroundingFieldsLeftLowerCorner(Field field) {
+		Field[] fields = new Field[3];
+		
+		fields[0] = field.getOwner().get(field.getX(), field.getY() - 1);
+		fields[1] = field.getOwner().get(field.getX() + 1, field.getY() - 1);
+		fields[2] = field.getOwner().get(field.getX() + 1, field.getY());
+		
+		return fields;
+	}
+
 	public static byte countSourroundingClickStates(Field field, ClickState clickState, Position position) {
 		switch (position) {
 		case CENTER:

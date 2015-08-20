@@ -26,4 +26,5 @@ public abstract class Model extends Observable {
 	public abstract int getMaxVerticalFields();
 	public abstract int getMinAmountOfMines();
 	public abstract int getMaxAmountOfMines();
+	public abstract Field getField(int x, int y);
 }

@@ -1,7 +1,9 @@
 package minesweeper.model;
 
+import static minesweeper.model.StateCalculator.countSourroundingClickStates;
+import static minesweeper.model.StateCalculator.countSourroundingMineStates;
+
 import minesweeper.exceptions.PointOutOfBoardBounds;
-import static minesweeper.model.StateCalculator.*;
 
 public class Field {
 	private final short x;
@@ -41,9 +43,6 @@ public class Field {
 	}
 	
 	public void clickField() {
-		if (clickState != ClickState.NOT_CLICKED)
-			return;
-		
 		clickState = ClickState.CLICKED;
 	}
 	
@@ -85,6 +84,10 @@ public class Field {
 				return Position.LEFT_UPPER_CORNER;
 			}
 		}
+	}
+	
+	public Field[] getSurroundingFields() {
+		return StateCalculator.getSurroundingFields(this);
 	}
 	
 	

@@ -121,5 +121,10 @@ public class DefaultModel extends Model {
 		return FieldsBoard.MAX_AMOUNT_OF_MINES;
 	}
 
+	@Override
+	public Field getField(int x, int y) {
+		return fieldsBoard.get(x, y);
+	}
+
 	
 }

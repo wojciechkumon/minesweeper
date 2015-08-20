@@ -14,6 +14,7 @@ import minesweeper.view.MineButton;
 
 public class MineButtonController implements MouseListener {
 	private Controller owner;
+	private boolean isGameActive = true;
 	
 	public MineButtonController(Controller owner) {
 		this.owner = owner;
@@ -72,7 +73,7 @@ public class MineButtonController implements MouseListener {
 		Backgrounds bg = Backgrounds.getInstace();
 		
 		if (btnImg == bg.clickedField) {
-			if (isPointInBounds(e.getPoint(), 0, 0, MineButton.WIDTH, MineButton.HEIGHT)) {
+			if (isPointInBounds(e.getPoint(), 0, 0, MineButton.WIDTH, MineButton.HEIGHT) && isGameActive) {
 				owner.getModel().checkField(mineBtn);
 			} else {
 				mineBtn.setImage(bg.field);
@@ -92,13 +93,13 @@ public class MineButtonController implements MouseListener {
 		Backgrounds bg = Backgrounds.getInstace();
 		
 		if ((btnImg == bg.field) || (btnImg == bg.hoveredField) || (btnImg == bg.clickedField)) {
-			if (isPointInBounds(e.getPoint(), 0, 0, MineButton.WIDTH, MineButton.HEIGHT)) {
+			if (isPointInBounds(e.getPoint(), 0, 0, MineButton.WIDTH, MineButton.HEIGHT) && isGameActive) {
 				owner.getModel().changeToFlag(mineBtn);
 			} else {
 				mineBtn.setImage(bg.field);
 			}
 		} else if ((btnImg == bg.flag) || (btnImg == bg.hoveredFlag) || (btnImg == bg.clickedFlag)) {
-			if (isPointInBounds(e.getPoint(), 0, 0, MineButton.WIDTH, MineButton.HEIGHT)) {
+			if (isPointInBounds(e.getPoint(), 0, 0, MineButton.WIDTH, MineButton.HEIGHT) && isGameActive) {
 				owner.getModel().removeFlag(mineBtn);
 			} else {
 				mineBtn.setImage(bg.flag);
@@ -107,13 +108,21 @@ public class MineButtonController implements MouseListener {
 	}
 
 	private void mouseReleasedMiddleBtn(MouseEvent e) {
-		MineButton mineBtn = (MineButton) e.getSource();
+	MineButton mineBtn = (MineButton) e.getSource();
 		BufferedImage btnImg = mineBtn.getImage();
 		Backgrounds bg = Backgrounds.getInstace();
 		//TODO
 		if (owner.getModel().isAreaRevealPossible(mineBtn)) {
 			owner.getModel().doAreaReveal(mineBtn);
 		}
+	}
+	
+	public boolean isGameActive() {
+		return isGameActive;
+	}
+
+	public void setGameActive(boolean isGameActive) {
+		this.isGameActive = isGameActive;
 	}
 
 
