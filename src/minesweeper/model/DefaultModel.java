@@ -125,5 +125,45 @@ public class DefaultModel extends Model {
 		return fieldsBoard.get(x, y);
 	}
 
+	@Override
+	public void mouseEnteredField(Field field) {
+		fieldsBoard.updateFieldView(field);
+	}
+
+	@Override
+	public void mouseExitedField(Field field) {
+		fieldsBoard.updateFieldView(field);
+	}
+
+	@Override
+	public void mouseMiddleButtonPressedField(Field field) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseButtonPressedField(Field field) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseLeftButtonReleasedField(Field field) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseRightButtonReleasedField(Field field) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseMiddleButtonReleasedField(Field field) {
+		// TODO Auto-generated method stub
+		
+	}
+
 	
 }

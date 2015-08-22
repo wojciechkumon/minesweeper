@@ -30,6 +30,9 @@ public class MineButtonController implements MouseListener {
 	@Override
 	public void mouseEntered(MouseEvent e) {
 		MineButton mineBtn = (MineButton)e.getSource();
+		Field field = owner.getModel().getField(mineBtn.getXPostition(), mineBtn.getYPostition());
+		
+		owner.getModel().mouseEnteredField(field);
 		
 		if (mineBtn.getImage() == Backgrounds.getInstace().field) {
 			mineBtn.setImage(Backgrounds.getInstace().hoveredField);
@@ -41,6 +44,9 @@ public class MineButtonController implements MouseListener {
 	@Override
 	public void mouseExited(MouseEvent e) {
 		MineButton mineBtn = (MineButton) e.getSource();
+		Field field = owner.getModel().getField(mineBtn.getXPostition(), mineBtn.getYPostition());
+		
+		owner.getModel().mouseExitedField(field);
 
 		if (mineBtn.getImage() == Backgrounds.getInstace().hoveredField) {
 			mineBtn.setImage(Backgrounds.getInstace().field);
@@ -52,6 +58,14 @@ public class MineButtonController implements MouseListener {
 	@Override
 	public void mousePressed(MouseEvent e) {
 		MineButton mineBtn = (MineButton) e.getSource();
+		Field field = owner.getModel().getField(mineBtn.getXPostition(), mineBtn.getYPostition());
+		
+		if (isMiddleMouseButton(e))
+			owner.getModel().mouseMiddleButtonPressedField(field);
+		else
+			owner.getModel().mouseButtonPressedField(field);
+		
+		
 		
 		if (!isFieldPressed(mineBtn) && isMiddleMouseButton(e)) {
 			mousePressedMiddleButton(e);
@@ -95,11 +109,18 @@ public class MineButtonController implements MouseListener {
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
+		MineButton mineBtn = (MineButton)e.getSource();
+		Field field = owner.getModel().getField(mineBtn.getXPostition(), mineBtn.getYPostition());
+		
+		
 		if (isLeftMouseButton(e)) {
+			owner.getModel().mouseLeftButtonReleasedField(field);
 			mouseReleasedLeftBtn(e);
 		} else if (isRightMouseButton(e)) {
+			owner.getModel().mouseRightButtonReleasedField(field);
 			mouseReleasedRightBtn(e);
 		} else if (isMiddleMouseButton(e)) {
+			owner.getModel().mouseMiddleButtonReleasedField(field);
 			mouseReleasedMiddleBtn(e);
 		}
 	}

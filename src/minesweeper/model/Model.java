@@ -25,4 +25,15 @@ public abstract class Model extends Observable {
 	public abstract int getMinAmountOfMines();
 	public abstract int getMaxAmountOfMines();
 	public abstract Field getField(int x, int y);
+	public abstract void mouseEnteredField(Field field);
+	public abstract void mouseExitedField(Field field);
+	public abstract void mouseMiddleButtonPressedField(Field field);
+	public abstract void mouseButtonPressedField(Field field);
+	public abstract void mouseLeftButtonReleasedField(Field field);
+	public abstract void mouseRightButtonReleasedField(Field field);
+	public abstract void mouseMiddleButtonReleasedField(Field field);
+	
+	
+	
+	
 }

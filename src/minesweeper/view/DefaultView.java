@@ -119,6 +119,7 @@ public class DefaultView extends JFrame implements View, ActionListener {
 		} else if (fieldToUpdate.getClickState() == ClickState.NOT_CLICKED) {
 			updateNotClickedField(fieldToUpdate);
 		}
+		// TODO updateField
 	}
 
 	private void updateClickedField(Field fieldToUpdate) {

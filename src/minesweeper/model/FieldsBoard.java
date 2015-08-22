@@ -136,8 +136,7 @@ public class FieldsBoard {
 		updateBox.setMinesLeftToUpdate(true);
 		updateBox.addFieldToUpdate(field);
 
-		owner.setChanges();
-		owner.notifyObservers(updateBox);
+		updateView(updateBox);
 	}
 
 	public void removeFlag(Field field) {
@@ -151,8 +150,13 @@ public class FieldsBoard {
 		updateBox.setMinesLeftToUpdate(true);
 		updateBox.addFieldToUpdate(field);
 		
-		owner.setChanges();
-		owner.notifyObservers(updateBox);
+		updateView(updateBox);
+	}
+	
+	public void updateFieldView(Field field) {
+		UpdateBox updateBox = new UpdateBox();
+		updateBox.addFieldToUpdate(field);
+		updateView(updateBox);
 	}
 	
 	public void checkField(Field field) {
@@ -177,8 +181,7 @@ public class FieldsBoard {
 		}
 			
 		
-		owner.setChanges();
-		owner.notifyObservers(updateBox);
+		updateView(updateBox);
 		if (field.getMineState() == MineState.SURROUNDING_0)
 			clickAllSurrounding(field);
 	}
@@ -224,8 +227,7 @@ public class FieldsBoard {
 		UpdateBox updateBox = new UpdateBox();
 		updateBox.setNeededRestart(true);
 		
-		owner.setChanges();
-		owner.notifyObservers(updateBox);
+		updateView(updateBox);
 	}
 	
 	public void restartGame(int horizontalMines, int verticalMines, int mines) throws AmountOutOfRange, PointOutOfBoardBounds {
@@ -234,8 +236,7 @@ public class FieldsBoard {
 		UpdateBox updateBox = new UpdateBox();
 		updateBox.setNeededRestart(true);
 		
-		owner.setChanges();
-		owner.notifyObservers(updateBox);
+		updateView(updateBox);
 	}
 	
 	private boolean isWin() {
@@ -282,6 +283,11 @@ public class FieldsBoard {
 	
 	public Model getOwner() {
 		return owner;
+	}
+	
+	private void updateView(UpdateBox updateBox) {
+		owner.setChanges();
+		owner.notifyObservers(updateBox);
 	}
 
 
